@@ -1,0 +1,2 @@
+# auto_brightness_for_mac
+auto_brightness_for_mac
