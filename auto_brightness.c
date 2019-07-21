@@ -12,9 +12,9 @@
 int main() {
 	int read_num;
 	// 最大环境亮度阈值
-	int max_num = 160;
+	int max_num = 240;
 	// 最小环境亮度阈值
-	int min_num = 240;
+	int min_num = 185;
 	int status = 0;
 	
 	wiringPiSetup();
@@ -22,9 +22,8 @@ int main() {
 
 	while(1) {
 		read_num = analogRead(A0);
-		int temp_value = 100 - (read_num - 40) / 2;
 		printf("目前读取亮度值：%d\n", read_num); //输出AD转换后的值 delay(1000);
-		if (read_num > 240) {
+		if (read_num > max_num) {
 			if (status == 0) {
 				continue;
 			}
@@ -32,7 +31,7 @@ int main() {
 			system("ssh sunbelife@192.168.123.141 /usr/local/bin/ddcctl -d 1 -b 1");
 			status = 0;
 			delay(3000);
-		} else if (read_num < 240 && read_num > 185) {
+		} else if (read_num < max_num && read_num > min_num) {
 			if (status == 1) {
 				continue;
 			}
@@ -40,7 +39,7 @@ int main() {
 			system("ssh sunbelife@192.168.123.141 /usr/local/bin/ddcctl -d 1 -b 50");
 			status = 1;
 			delay(3000);
-		} else if (read_num < 185) {
+		} else if (read_num < min_num) {
 			if (status == 2) {
 				continue;
 			}
